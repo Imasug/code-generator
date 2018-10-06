@@ -1,35 +1,39 @@
 ﻿$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-. $here\Constants.ps1
-. $here\ParseFirstTemplate.ps1
-. $here\GetFirstTemplate.ps1
+. $here\ParseCode.ps1
+. $here\CreateCodeConvList.ps1
 
 function ReplaceTemplates {
+
     param (
         [string] $code,
         [hashtable] $templateMap
     )
 
-    # It guarantee to have the correct template
-    $template = GetFirstTemplate $code
+    [string] $parsedCode = ParseCode $code
 
-    # If the code doesn't have template, returns the code
-    if ($null -eq $template) {
-        return $code
-    }
+    [array] $codeConvList = CreateCodeConvList $parsedCode
 
-    # It guarantee to match the template regex
-    [array] $result = ParseFirstTemplate $template
-    [string] $key = $result[1]
-    [string] $arg = $result[2]
-    [array] $argArr = $arg -split $Qualifier
-    if (-not($templateMap.ContainsKey($key))) {
-        throw "[$key] key isn't defined!"
-    }
-    [string] $insert = $templateMap[$key]
-    for ($i = 0; $i -lt $argArr.Count; $i++) {
-        $insert = $insert.Replace("{$i}", $argArr[$i].trim())
-    }
-    $contents = $code.Replace($template, $insert)
+    foreach ($codeConv in $codeConvList) {
 
-    return (ReplaceTemplates $contents $templateMap)
+        [regex] $regex = $codeConv.target
+        [string] $templateName = $codeConv.templateName
+        [string] $splitter = $codeConv.splitter
+
+        $regex.Matches($parsedCode) | % {
+
+            [string] $match = $_.Groups[0].Value
+            [string] $arg = $_.Groups[1].Value
+            [array] $argArr = $arg -split $splitter
+
+            [string] $insert = $templateMap[$templateName]
+            for ($i = 0; $i -lt $argArr.Length; $i++) {
+                [string] $argValue = $argArr[$i].Trim()
+                if ($argValue.length -ne 0) {
+                    $insert = $insert.Replace("{$i}", (ReplaceTemplates $argValue $templateMap))
+                }
+            }
+            $parsedCode = $parsedCode.Replace($match, $insert)
+        }
+    }
+    return $parsedCode
 }
