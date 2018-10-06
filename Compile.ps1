@@ -7,6 +7,9 @@ Get-ChildItem $FuncDir -Filter *.ps1 | ? { -not($_.name.Contains("Tests")) } | %
     . $_.FullName
 }
 
+# Delete files in the output directory
+Remove-Item $OutputDir/*.html -Force
+
 $templateMap = CreateTemplateMap "$TemplateDir"
 
 Get-ChildItem $InputDir * | % {
