@@ -27,6 +27,7 @@ function ReplaceTemplates {
             [array] $argArr = $arg -split $splitter
 
             [string] $insert = $templateMap[$templateName]
+            $insert = ReplaceTemplates $insert $templateMap
             for ($i = 0; $i -lt $argArr.Length; $i++) {
                 [string] $argValue = $argArr[$i].Trim()
                 if ($argValue.length -ne 0) {

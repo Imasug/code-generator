@@ -17,6 +17,11 @@ function ParseCode {
     param (
         [string] $code
     )
+    
+    # Confirm the template exists
+    if (-not($code -match "--{")) {
+        return $code
+    }
 
     # Init
     [int] $index = 0
