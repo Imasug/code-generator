@@ -62,7 +62,3 @@ function ParseCode {
 
     return $parsedCode
 }
-
-# [System.Collections.Queue] $strQueue = New-Object System.Collections.Queue
-# $strQueue.Enqueue("abc")
-# Write-Host (QueueToString $strQueue)

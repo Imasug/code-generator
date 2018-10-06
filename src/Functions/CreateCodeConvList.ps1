@@ -33,9 +33,10 @@ function CreateCodeConvList {
     [regex] $regex = [regex] "-([\d]+)-{([a-zA-z]+)\("
 
     # Create CodeConvList
-    $regex.Matches($parsedCode) | % {
-        [int] $index = $_.Groups[1].Value
-        [string] $templateName = $_.Groups[2].Value
+    $result = $regex.Matches($parsedCode)
+    foreach ($item in $result) {
+        [int] $index = $item.Groups[1].Value
+        [string] $templateName = $item.Groups[2].Value
         [string] $target = "-$index-{$templateName\(([\s\S]*)\)}-$index-"
         [string] $splitter = "&$index&"
         $item = [CodeConv]::new($target, $templateName, $splitter)

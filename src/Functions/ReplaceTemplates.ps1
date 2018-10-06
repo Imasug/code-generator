@@ -15,14 +15,15 @@ function ReplaceTemplates {
 
     foreach ($codeConv in $codeConvList) {
 
-        [regex] $regex = $codeConv.target
+        [regex] $target = [regex] $codeConv.target
         [string] $templateName = $codeConv.templateName
         [string] $splitter = $codeConv.splitter
 
-        $regex.Matches($parsedCode) | % {
+        $result = $target.Matches($parsedCode)
+        foreach ($item in $result) {
 
-            [string] $match = $_.Groups[0].Value
-            [string] $arg = $_.Groups[1].Value
+            [string] $match = $item.Groups[0].Value
+            [string] $arg = $item.Groups[1].Value
             [array] $argArr = $arg -split $splitter
 
             [string] $insert = $templateMap[$templateName]
@@ -35,5 +36,6 @@ function ReplaceTemplates {
             $parsedCode = $parsedCode.Replace($match, $insert)
         }
     }
+
     return $parsedCode
 }

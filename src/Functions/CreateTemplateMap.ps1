@@ -1,7 +1,9 @@
 ﻿function CreateTemplateMap {
+
     param (
         [string] $dir
     )
+
     $templateMap = @{}
     Get-ChildItem $dir * -Recurse | ? { -not($_.PSIsContainer) } | % {
         $key = $_.BaseName
@@ -14,5 +16,6 @@
         }
         $templateMap[$key] = $value
     }
+
     return $templateMap
 }

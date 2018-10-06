@@ -1,4 +1,4 @@
 $FuncDir = ".\src\Functions"
 $InputDir = ".\input"
-$OutputDir = ".\Output"
+$OutputDir = ".\output"
 $TemplateDir = ".\template"
