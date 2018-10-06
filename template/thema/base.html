@@ -6,13 +6,39 @@
 
 <body>
     <header>
+        --{navbar()}--
     </header>
     <main>
-        {1}
+        <div class="container py-5">
+
+            <!-- title -->
+            <div class="row mb-3">
+                <div class="col">
+                    <h2>
+                        {0}
+                    </h2>
+                </div>
+            </div>
+
+            <!-- content -->
+            <div class="row">
+                <div class="col">
+                    {1}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- modals -->
+        --{modals()}--
+
     </main>
     <footer>
         {2}
     </footer>
+
+    --{script()}--
+
 </body>
 
 </html>
