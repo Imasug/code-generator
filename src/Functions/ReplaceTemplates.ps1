@@ -31,9 +31,13 @@ function ReplaceTemplates {
             for ($i = 0; $i -lt $argArr.Length; $i++) {
                 [string] $argValue = $argArr[$i].Trim()
                 if ($argValue.length -ne 0) {
-                    $insert = $insert.Replace("{$i}", (ReplaceTemplates $argValue $templateMap))
+                    [string] $replacement = ReplaceTemplates $argValue $templateMap
+                    Write-Debug "`n$("templateName".PadRight(20)): $templateName`n$("index".PadRight(20)): {$i}`n$replacement`n"
+                    $insert = $insert.Replace("{$i}", $replacement)
                 }
             }
+            $insert = $insert -replace "\{[\d]+\}", ""
+            $insert = $insert -replace "##", ""
             $parsedCode = $parsedCode.Replace($match, $insert)
         }
     }
