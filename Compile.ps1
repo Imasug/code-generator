@@ -16,6 +16,7 @@ Get-ChildItem $InputDir * | % {
     $execTime = Measure-Command {
         $code = Get-Content $_.FullName -Raw -Encoding UTF8
         $contents = ReplaceTemplates $code $templateMap
+        $contents = $contents -replace "\{[\d]+\}", ""
         $fileName = $_.Name
         $contents | Out-File "$OutputDir\$fileName" -Encoding utf8
     }
