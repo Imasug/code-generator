@@ -12,7 +12,7 @@ Remove-Item $OutputDir/*.html -Force
 
 $templateMap = CreateTemplateMap "$TemplateDir"
 
-Get-ChildItem $InputDir * -Recurse | ? { !$_.PSIsContainer } | % {
+Get-ChildItem $InputDir * -Recurse | ? { !$_.PSIsContainer } | Sort-Object -Property LastWriteTime -Descending | % {
     $execTime = Measure-Command {
         $code = Get-Content $_.FullName -Raw -Encoding UTF8
         $contents = ReplaceTemplates $code $templateMap
