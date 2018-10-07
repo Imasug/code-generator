@@ -1,18 +1,4 @@
-﻿function QueueToString {
-
-    param (
-        [System.Collections.Queue] $queue
-    )
-
-    [string] $str = ""
-    foreach ($item in $queue) {
-        $str += $item
-    }
-
-    return $str
-}
-
-function ParseCode {
+﻿function ParseCode {
 
     param (
         [string] $code
@@ -38,7 +24,7 @@ function ParseCode {
         # When the queue is full
         if ($strQueue.Count -eq $StrQueueMaxSize) {
 
-            [string] $str = QueueToString $strQueue
+            [string] $str = -join $strQueue
 
             switch ($str) {
                 "--{" {
